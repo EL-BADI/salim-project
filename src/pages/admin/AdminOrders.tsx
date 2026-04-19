@@ -2,8 +2,10 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Navigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 export default function AdminOrders() {
+  const { t } = useLanguage();
   const isAdmin = useQuery(api.auth.isAdmin);
   const orders = useQuery(api.admin.getAllOrders);
   const updateStatus = useMutation(api.admin.updateOrderStatus);
@@ -23,9 +25,9 @@ export default function AdminOrders() {
   const handleStatusChange = async (orderId: string, status: string) => {
     try {
       await updateStatus({ orderId: orderId as any, status: status as any });
-      toast.success("Order status updated!");
+      toast.success(t("orderStatusUpdated"));
     } catch (error: any) {
-      toast.error(error.message || "Failed to update status");
+      toast.error(error.message || t("failedToUpdateStatus"));
     }
   };
 
@@ -46,7 +48,7 @@ export default function AdminOrders() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">Manage Orders</h1>
+      <h1 className="text-4xl font-bold mb-8">{t("manageOrders")}</h1>
 
       <div className="space-y-6">
         {orders.map((order) => (
@@ -54,25 +56,34 @@ export default function AdminOrders() {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm text-gray-600">
-                  Order placed: {new Date(order._creationTime).toLocaleDateString()}
+                  {t("orderPlaced")}:{" "}
+                  {new Date(order._creationTime).toLocaleDateString()}
                 </p>
-                <p className="text-sm text-gray-600">Order ID: {order._id}</p>
-                <p className="text-sm text-gray-600">User ID: {order.userId}</p>
+                <p className="text-sm text-gray-600">
+                  {t("orderId")}: {order._id}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {t("userId")}: {order.userId}
+                </p>
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-2">Status</label>
+                <label className="block text-sm font-semibold mb-2">
+                  {t("status")}
+                </label>
                 <select
                   value={order.status}
-                  onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                  onChange={(e) =>
+                    handleStatusChange(order._id, e.target.value)
+                  }
                   className={`px-3 py-2 rounded-lg font-semibold ${getStatusColor(
-                    order.status
+                    order.status,
                   )}`}
                 >
-                  <option value="pending">PENDING</option>
-                  <option value="processing">PROCESSING</option>
-                  <option value="shipped">SHIPPED</option>
-                  <option value="delivered">DELIVERED</option>
-                  <option value="cancelled">CANCELLED</option>
+                  <option value="pending">{t("pending")}</option>
+                  <option value="processing">{t("processing")}</option>
+                  <option value="shipped">{t("shipped")}</option>
+                  <option value="delivered">{t("delivered")}</option>
+                  <option value="cancelled">{t("cancelled")}</option>
                 </select>
               </div>
             </div>
@@ -87,7 +98,9 @@ export default function AdminOrders() {
                   />
                   <div className="flex-1">
                     <p className="font-semibold">{item.name}</p>
-                    <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                    <p className="text-sm text-gray-600">
+                      {t("quantity")}: {item.quantity}
+                    </p>
                     <p className="text-sm font-semibold text-primary">
                       ${item.price.toFixed(2)}
                     </p>
@@ -98,11 +111,12 @@ export default function AdminOrders() {
 
             <div className="border-t pt-4 grid md:grid-cols-2 gap-4">
               <div className="text-sm text-gray-600">
-                <p className="font-semibold mb-2">Shipping Address:</p>
+                <p className="font-semibold mb-2">{t("shippingAddress")}</p>
                 <p>{order.shippingAddress.name}</p>
                 <p>
                   {order.shippingAddress.line1}
-                  {order.shippingAddress.line2 && `, ${order.shippingAddress.line2}`}
+                  {order.shippingAddress.line2 &&
+                    `, ${order.shippingAddress.line2}`}
                 </p>
                 <p>
                   {order.shippingAddress.city}, {order.shippingAddress.state}{" "}
@@ -110,10 +124,14 @@ export default function AdminOrders() {
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-gray-600">Subtotal: ${order.subtotal.toFixed(2)}</p>
-                <p className="text-sm text-gray-600">Shipping: ${order.shipping.toFixed(2)}</p>
+                <p className="text-sm text-gray-600">
+                  {t("subtotal")} : ${order.subtotal.toFixed(2)}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {t("shipping")} : ${order.shipping.toFixed(2)}
+                </p>
                 <p className="text-2xl font-bold text-primary mt-2">
-                  Total: ${order.total.toFixed(2)}
+                  {t("total")} : ${order.total.toFixed(2)}
                 </p>
               </div>
             </div>

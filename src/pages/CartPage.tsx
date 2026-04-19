@@ -3,17 +3,20 @@ import { api } from "../../convex/_generated/api";
 import { Link, useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { toast } from "sonner";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export default function CartPage() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const cartItems = useQuery(api.cart.get);
   const updateQuantity = useMutation(api.cart.updateQuantity);
   const removeItem = useMutation(api.cart.removeItem);
 
-  const subtotal = cartItems?.reduce(
-    (sum, item) => sum + (item.product?.price || 0) * item.quantity,
-    0
-  ) || 0;
+  const subtotal =
+    cartItems?.reduce(
+      (sum, item) => sum + (item.product?.price || 0) * item.quantity,
+      0,
+    ) || 0;
   const shipping = subtotal > 50 ? 0 : 9.99;
   const total = subtotal + shipping;
 
@@ -21,16 +24,16 @@ export default function CartPage() {
     try {
       await updateQuantity({ itemId, quantity: newQuantity });
     } catch (error) {
-      toast.error("Failed to update quantity");
+      toast.error(t("failedToUpdate"));
     }
   };
 
   const handleRemove = async (itemId: any) => {
     try {
       await removeItem({ itemId });
-      toast.success("Removed from cart");
+      toast.success(t("removedFromCart"));
     } catch (error) {
-      toast.error("Failed to remove item");
+      toast.error(t("failedToRemove"));
     }
   };
 
@@ -45,13 +48,13 @@ export default function CartPage() {
   if (cartItems.length === 0) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-12 text-center">
-        <h1 className="text-3xl font-bold mb-4">Your cart is empty</h1>
-        <p className="text-gray-600 mb-8">Add some products to get started!</p>
+        <h1 className="text-3xl font-bold mb-4">{t("yourCartIsEmpty")}</h1>
+        <p className="text-gray-600 mb-8">{t("addSomeProducts")}</p>
         <Link
           to="/products"
           className="inline-block px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors"
         >
-          Browse Products
+          {t("browseProducts")}
         </Link>
       </div>
     );
@@ -59,7 +62,7 @@ export default function CartPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">Shopping Cart</h1>
+      <h1 className="text-4xl font-bold mb-8">{t("shoppingCart")}</h1>
 
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Cart Items */}
@@ -118,25 +121,25 @@ export default function CartPage() {
         {/* Order Summary */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-xl shadow p-6 sticky top-24">
-            <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
+            <h2 className="text-2xl font-bold mb-6">{t("orderSummary")}</h2>
             <div className="space-y-3 mb-6">
               <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal</span>
+                <span className="text-gray-600">{t("subtotal")}</span>
                 <span className="font-semibold">${subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Shipping</span>
                 <span className="font-semibold">
-                  {shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}
+                  {shipping === 0 ? t("free") : `$${shipping.toFixed(2)}`}
                 </span>
               </div>
               {subtotal < 50 && subtotal > 0 && (
                 <p className="text-sm text-gray-500">
-                  Add ${(50 - subtotal).toFixed(2)} more for free shipping!
+                  {`Add $${(50 - subtotal).toFixed(2)} ${t("addMoreForFreeShipping")}`}
                 </p>
               )}
               <div className="border-t pt-3 flex justify-between text-xl font-bold">
-                <span>Total</span>
+                <span>{t("total")}</span>
                 <span className="text-primary">${total.toFixed(2)}</span>
               </div>
             </div>
@@ -144,7 +147,7 @@ export default function CartPage() {
               onClick={() => navigate("/checkout")}
               className="w-full px-6 py-4 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-semibold text-lg"
             >
-              Proceed to Checkout
+              {t("proceedToCheckout")}
             </button>
           </div>
         </div>

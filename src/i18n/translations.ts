@@ -8,7 +8,7 @@ export const translations = {
     signIn: "Sign In",
     signOut: "Sign Out",
     cart: "Cart",
-    
+
     // Home Page
     welcomeToShopHub: "Welcome to ShopHub",
     personalizedShopping: "Your personalized shopping experience awaits",
@@ -18,14 +18,14 @@ export const translations = {
     shopByCategory: "Shop by Category",
     trendingNow: "Trending Now",
     recommendedForYou: "Recommended for You",
-    
+
     // Products Page
     searchProducts: "Search products...",
     search: "Search",
     all: "All",
     noProductsFound: "No products found",
     reviews: "reviews",
-    
+
     // Product Detail
     backButton: "Back",
     inStock: "In Stock",
@@ -35,7 +35,8 @@ export const translations = {
     addToCart: "Add to Cart",
     addedToCart: "Added to cart!",
     failedToAddToCart: "Failed to add to cart",
-    
+    productNotFound: "Product not found",
+
     // Cart Page
     shoppingCart: "Shopping Cart",
     yourCartIsEmpty: "Your cart is empty",
@@ -51,7 +52,7 @@ export const translations = {
     removedFromCart: "Removed from cart",
     failedToRemove: "Failed to remove item",
     failedToUpdate: "Failed to update quantity",
-    
+
     // Checkout Page
     checkout: "Checkout",
     shippingAddress: "Shipping Address",
@@ -65,7 +66,7 @@ export const translations = {
     orderPlacedSuccess: "Order placed successfully!",
     failedToPlaceOrder: "Failed to place order",
     qty: "Qty",
-    
+
     // Orders Page
     myOrders: "My Orders",
     noOrdersYet: "No orders yet",
@@ -77,7 +78,7 @@ export const translations = {
     shipped: "SHIPPED",
     delivered: "DELIVERED",
     cancelled: "CANCELLED",
-    
+
     // Admin Dashboard
     adminDashboard: "Admin Dashboard",
     totalProducts: "Total Products",
@@ -91,7 +92,7 @@ export const translations = {
     organizeCategories: "Organize product categories",
     manageOrders: "Manage Orders",
     viewUpdateOrders: "View and update order status",
-    
+
     // Admin Products
     addProduct: "Add Product",
     newProduct: "New Product",
@@ -110,17 +111,19 @@ export const translations = {
     uploading: "Uploading...",
     create: "Create",
     update: "Update",
+    delete: "Delete",
     cancel: "Cancel",
     product: "Product",
     status: "Status",
     actions: "Actions",
+    inactive: "Inactive",
     productCreated: "Product created!",
     productUpdated: "Product updated!",
     productDeleted: "Product deleted!",
     failedToSave: "Failed to save product",
     failedToDelete: "Failed to delete product",
     confirmDelete: "Are you sure you want to delete this product?",
-    
+
     // Admin Categories
     addCategory: "Add Category",
     newCategory: "New Category",
@@ -132,18 +135,27 @@ export const translations = {
     failedToDeleteCategory: "Failed to delete category",
     cannotDeleteCategory: "Cannot delete category with products",
     confirmDeleteCategory: "Are you sure you want to delete this category?",
-    
+
     // Admin Orders
     userId: "User ID",
     orderStatusUpdated: "Order status updated!",
     failedToUpdateStatus: "Failed to update status",
-    
+
     // Auth
     email: "Email",
     password: "Password",
     signInButton: "Sign In",
     signUpButton: "Sign Up",
-    
+    invalidPassword: "Invalid password. Please try again.",
+    couldNotSignIn: "Could not sign in, did you mean to sign up?",
+    couldNotSignUp: "Could not sign up, did you mean to sign in?",
+    dontHaveAccount: "Don't have an account?",
+    alreadyHaveAccount: "Already have an account?",
+    signUpInstead: "Sign up instead",
+    signInInstead: "Sign in instead",
+    or: "or",
+    signInAnonymously: "Sign in anonymously",
+
     // Language
     language: "Language",
     english: "English",
@@ -158,7 +170,7 @@ export const translations = {
     signIn: "تسجيل الدخول",
     signOut: "تسجيل الخروج",
     cart: "السلة",
-    
+
     // Home Page
     welcomeToShopHub: "مرحباً بك في شوب هاب",
     personalizedShopping: "تجربة تسوق مخصصة في انتظارك",
@@ -168,14 +180,14 @@ export const translations = {
     shopByCategory: "تسوق حسب الفئة",
     trendingNow: "الأكثر رواجاً",
     recommendedForYou: "موصى به لك",
-    
+
     // Products Page
     searchProducts: "ابحث عن المنتجات...",
     search: "بحث",
     all: "الكل",
     noProductsFound: "لم يتم العثور على منتجات",
     reviews: "تقييم",
-    
+
     // Product Detail
     backButton: "رجوع",
     inStock: "متوفر",
@@ -185,7 +197,8 @@ export const translations = {
     addToCart: "أضف إلى السلة",
     addedToCart: "تمت الإضافة إلى السلة!",
     failedToAddToCart: "فشل في الإضافة إلى السلة",
-    
+    productNotFound: "المنتج غير موجود",
+
     // Cart Page
     shoppingCart: "سلة التسوق",
     yourCartIsEmpty: "سلتك فارغة",
@@ -201,7 +214,7 @@ export const translations = {
     removedFromCart: "تمت الإزالة من السلة",
     failedToRemove: "فشل في إزالة العنصر",
     failedToUpdate: "فشل في تحديث الكمية",
-    
+
     // Checkout Page
     checkout: "الدفع",
     shippingAddress: "عنوان الشحن",
@@ -215,7 +228,7 @@ export const translations = {
     orderPlacedSuccess: "تم تقديم الطلب بنجاح!",
     failedToPlaceOrder: "فشل في تقديم الطلب",
     qty: "الكمية",
-    
+
     // Orders Page
     myOrders: "طلباتي",
     noOrdersYet: "لا توجد طلبات بعد",
@@ -227,7 +240,7 @@ export const translations = {
     shipped: "تم الشحن",
     delivered: "تم التسليم",
     cancelled: "ملغى",
-    
+
     // Admin Dashboard
     adminDashboard: "لوحة الإدارة",
     totalProducts: "إجمالي المنتجات",
@@ -241,7 +254,7 @@ export const translations = {
     organizeCategories: "تنظيم فئات المنتجات",
     manageOrders: "إدارة الطلبات",
     viewUpdateOrders: "عرض وتحديث حالة الطلبات",
-    
+
     // Admin Products
     addProduct: "إضافة منتج",
     newProduct: "منتج جديد",
@@ -260,17 +273,19 @@ export const translations = {
     uploading: "جاري الرفع...",
     create: "إنشاء",
     update: "تحديث",
+    delete: "حذف",
     cancel: "إلغاء",
     product: "المنتج",
     status: "الحالة",
     actions: "الإجراءات",
+    inactive: "غير نشط",
     productCreated: "تم إنشاء المنتج!",
     productUpdated: "تم تحديث المنتج!",
     productDeleted: "تم حذف المنتج!",
     failedToSave: "فشل في حفظ المنتج",
     failedToDelete: "فشل في حذف المنتج",
     confirmDelete: "هل أنت متأكد من حذف هذا المنتج؟",
-    
+
     // Admin Categories
     addCategory: "إضافة فئة",
     newCategory: "فئة جديدة",
@@ -282,18 +297,27 @@ export const translations = {
     failedToDeleteCategory: "فشل في حذف الفئة",
     cannotDeleteCategory: "لا يمكن حذف فئة تحتوي على منتجات",
     confirmDeleteCategory: "هل أنت متأكد من حذف هذه الفئة؟",
-    
+
     // Admin Orders
     userId: "معرف المستخدم",
     orderStatusUpdated: "تم تحديث حالة الطلب!",
     failedToUpdateStatus: "فشل في تحديث الحالة",
-    
+
     // Auth
     email: "البريد الإلكتروني",
     password: "كلمة المرور",
     signInButton: "تسجيل الدخول",
     signUpButton: "إنشاء حساب",
-    
+    invalidPassword: "كلمة المرور غير صحيحة. حاول مرة أخرى.",
+    couldNotSignIn: "تعذر تسجيل الدخول، هل تريد التسجيل بدلاً من ذلك؟",
+    couldNotSignUp: "تعذر إنشاء الحساب، هل تريد تسجيل الدخول بدلاً من ذلك؟",
+    dontHaveAccount: "ليس لديك حساب؟",
+    alreadyHaveAccount: "هل لديك حساب بالفعل؟",
+    signUpInstead: "سجل بدلاً من ذلك",
+    signInInstead: "سجل الدخول بدلاً من ذلك",
+    or: "أو",
+    signInAnonymously: "تسجيل الدخول كمجهول",
+
     // Language
     language: "اللغة",
     english: "English",

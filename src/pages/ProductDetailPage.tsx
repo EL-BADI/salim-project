@@ -4,19 +4,23 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { ShoppingCart, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export default function ProductDetailPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [quantity, setQuantity] = useState(1);
-  
+
   const product = useQuery(api.products.getBySlug, { slug: slug! });
   const addToCart = useMutation(api.cart.addItem);
   const trackInteraction = useMutation(api.interactions.track);
 
   useEffect(() => {
     if (product) {
-      trackInteraction({ productId: product._id, type: "view" }).catch(() => {});
+      trackInteraction({ productId: product._id, type: "view" }).catch(
+        () => {},
+      );
     }
   }, [product?._id]);
 
@@ -25,9 +29,9 @@ export default function ProductDetailPage() {
     try {
       await addToCart({ productId: product._id, quantity });
       await trackInteraction({ productId: product._id, type: "cart_add" });
-      toast.success("Added to cart!");
+      toast.success(t("addedToCart"));
     } catch (error) {
-      toast.error("Failed to add to cart");
+      toast.error(t("failedToAddToCart"));
     }
   };
 
@@ -42,9 +46,9 @@ export default function ProductDetailPage() {
   if (product === null) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-12 text-center">
-        <h1 className="text-3xl font-bold mb-4">Product not found</h1>
+        <h1 className="text-3xl font-bold mb-4">{t("productNotFound")}</h1>
         <Link to="/products" className="text-primary hover:underline">
-          Back to products
+          {`${t("backButton")} ${t("products")}`}
         </Link>
       </div>
     );
@@ -57,7 +61,7 @@ export default function ProductDetailPage() {
         className="flex items-center gap-2 text-gray-600 hover:text-primary mb-6 transition-colors"
       >
         <ArrowLeft className="w-5 h-5" />
-        Back
+        {t("backButton")}
       </button>
 
       <div className="grid md:grid-cols-2 gap-12">
@@ -77,8 +81,12 @@ export default function ProductDetailPage() {
             <div className="flex items-center gap-4 mb-4">
               <div className="flex items-center gap-2">
                 <span className="text-yellow-500">⭐</span>
-                <span className="font-semibold">{product.rating?.toFixed(1)}</span>
-                <span className="text-gray-600">({product.reviewCount} reviews)</span>
+                <span className="font-semibold">
+                  {product.rating?.toFixed(1)}
+                </span>
+                <span className="text-gray-600">
+                  ({product.reviewCount} {t("reviews")})
+                </span>
               </div>
             </div>
           </div>
@@ -119,9 +127,13 @@ export default function ProductDetailPage() {
                 >
                   -
                 </button>
-                <span className="w-12 text-center font-semibold">{quantity}</span>
+                <span className="w-12 text-center font-semibold">
+                  {quantity}
+                </span>
                 <button
-                  onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                  onClick={() =>
+                    setQuantity(Math.min(product.stock, quantity + 1))
+                  }
                   className="w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors"
                 >
                   +
@@ -132,7 +144,7 @@ export default function ProductDetailPage() {
             <div className="text-sm text-gray-600">
               {product.stock > 0 ? (
                 <span className="text-green-600 font-semibold">
-                  In Stock ({product.stock} available)
+                  {t("inStock")} ({product.stock} {t("available")})
                 </span>
               ) : (
                 <span className="text-red-600 font-semibold">Out of Stock</span>
@@ -145,7 +157,7 @@ export default function ProductDetailPage() {
               className="w-full flex items-center justify-center gap-2 px-8 py-4 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg font-semibold"
             >
               <ShoppingCart className="w-6 h-6" />
-              Add to Cart
+              {t("addToCart")}
             </button>
           </div>
         </div>

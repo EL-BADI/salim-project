@@ -2,9 +2,11 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useLanguage } from "./contexts/LanguageContext";
 
 export function SignInForm() {
   const { signIn } = useAuthActions();
+  const { t } = useLanguage();
   const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
   const [submitting, setSubmitting] = useState(false);
 
@@ -20,12 +22,12 @@ export function SignInForm() {
           void signIn("password", formData).catch((error) => {
             let toastTitle = "";
             if (error.message.includes("Invalid password")) {
-              toastTitle = "Invalid password. Please try again.";
+              toastTitle = t("invalidPassword");
             } else {
               toastTitle =
                 flow === "signIn"
-                  ? "Could not sign in, did you mean to sign up?"
-                  : "Could not sign up, did you mean to sign in?";
+                  ? (t("couldNotSignIn") ?? t("signInButton"))
+                  : (t("couldNotSignUp") ?? t("signUpButton"));
             }
             toast.error(toastTitle);
             setSubmitting(false);
@@ -36,41 +38,39 @@ export function SignInForm() {
           className="auth-input-field"
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder={t("email")}
           required
         />
         <input
           className="auth-input-field"
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder={t("password")}
           required
         />
         <button className="auth-button" type="submit" disabled={submitting}>
-          {flow === "signIn" ? "Sign in" : "Sign up"}
+          {flow === "signIn" ? t("signInButton") : t("signUpButton")}
         </button>
         <div className="text-center text-sm text-secondary">
           <span>
-            {flow === "signIn"
-              ? "Don't have an account? "
-              : "Already have an account? "}
+            {flow === "signIn" ? t("dontHaveAccount") : t("alreadyHaveAccount")}
           </span>
           <button
             type="button"
             className="text-primary hover:text-primary-hover hover:underline font-medium cursor-pointer"
             onClick={() => setFlow(flow === "signIn" ? "signUp" : "signIn")}
           >
-            {flow === "signIn" ? "Sign up instead" : "Sign in instead"}
+            {flow === "signIn" ? t("signUpInstead") : t("signInInstead")}
           </button>
         </div>
       </form>
       <div className="flex items-center justify-center my-3">
         <hr className="my-4 grow border-gray-200" />
-        <span className="mx-4 text-secondary">or</span>
+        <span className="mx-4 text-secondary">{t("or")}</span>
         <hr className="my-4 grow border-gray-200" />
       </div>
       <button className="auth-button" onClick={() => void signIn("anonymous")}>
-        Sign in anonymously
+        {t("signInAnonymously")}
       </button>
     </div>
   );

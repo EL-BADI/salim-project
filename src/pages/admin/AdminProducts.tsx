@@ -30,7 +30,11 @@ export default function AdminProducts() {
     stock: 0,
   });
 
-  if (isAdmin === undefined || products === undefined || categories === undefined) {
+  if (
+    isAdmin === undefined ||
+    products === undefined ||
+    categories === undefined
+  ) {
     return (
       <div className="flex justify-center items-center min-h-[60vh]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -132,41 +136,56 @@ export default function AdminProducts() {
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-6 mb-8 space-y-4">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white rounded-xl shadow p-6 mb-8 space-y-4"
+        >
           <h2 className="text-2xl font-bold">
             {editingId ? t("editProduct") : t("newProduct")}
           </h2>
 
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold mb-2">{t("name")}</label>
+              <label className="block text-sm font-semibold mb-2">
+                {t("name")}
+              </label>
               <input
                 type="text"
                 required
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold mb-2">{t("slug")}</label>
+              <label className="block text-sm font-semibold mb-2">
+                {t("slug")}
+              </label>
               <input
                 type="text"
                 required
                 value={formData.slug}
-                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, slug: e.target.value })
+                }
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2">{t("description")}</label>
+            <label className="block text-sm font-semibold mb-2">
+              {t("description")}
+            </label>
             <textarea
               required
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
               rows={3}
             />
@@ -174,46 +193,68 @@ export default function AdminProducts() {
 
           <div className="grid md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-semibold mb-2">{t("price")}</label>
+              <label className="block text-sm font-semibold mb-2">
+                {t("price")}
+              </label>
               <input
                 type="number"
                 step="0.01"
                 required
                 value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    price: parseFloat(e.target.value),
+                  })
+                }
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold mb-2">{t("compareAtPrice")}</label>
+              <label className="block text-sm font-semibold mb-2">
+                {t("compareAtPrice")}
+              </label>
               <input
                 type="number"
                 step="0.01"
                 value={formData.compareAtPrice}
-                onChange={(e) => setFormData({ ...formData, compareAtPrice: parseFloat(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    compareAtPrice: parseFloat(e.target.value),
+                  })
+                }
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold mb-2">{t("stock")}</label>
+              <label className="block text-sm font-semibold mb-2">
+                {t("stock")}
+              </label>
               <input
                 type="number"
                 required
                 value={formData.stock}
-                onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({ ...formData, stock: parseInt(e.target.value) })
+                }
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2">{t("category")}</label>
+            <label className="block text-sm font-semibold mb-2">
+              {t("category")}
+            </label>
             <select
               required
               value={formData.categoryId}
-              onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, categoryId: e.target.value })
+              }
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
             >
               <option value="">{t("selectCategory")}</option>
@@ -226,18 +267,24 @@ export default function AdminProducts() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2">{t("tags")}</label>
+            <label className="block text-sm font-semibold mb-2">
+              {t("tags")}
+            </label>
             <input
               type="text"
               required
               value={formData.tags}
-              onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, tags: e.target.value })
+              }
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-2">{t("imageUrl")}</label>
+            <label className="block text-sm font-semibold mb-2">
+              {t("imageUrl")}
+            </label>
             <ImageUpload
               value={formData.imageUrl}
               onChange={(url) => setFormData({ ...formData, imageUrl: url })}
@@ -269,11 +316,21 @@ export default function AdminProducts() {
         <table className="w-full">
           <thead className="bg-gray-50 border-b">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold">{t("product")}</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold">{t("price")}</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold">{t("stock")}</th>
-              <th className="px-6 py-3 text-left text-sm font-semibold">{t("status")}</th>
-              <th className="px-6 py-3 text-right text-sm font-semibold">{t("actions")}</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold">
+                {t("product")}
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold">
+                {t("price")}
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold">
+                {t("stock")}
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-semibold">
+                {t("status")}
+              </th>
+              <th className="px-6 py-3 text-right text-sm font-semibold">
+                {t("actions")}
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y">
@@ -302,7 +359,7 @@ export default function AdminProducts() {
                         : "bg-gray-100 text-gray-800"
                     }`}
                   >
-                    {product.isActive ? t("active") : "Inactive"}
+                    {product.isActive ? t("active") : t("inactive")}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
