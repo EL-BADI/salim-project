@@ -3,9 +3,11 @@ import { api } from "../../convex/_generated/api";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const cartItems = useQuery(api.cart.get);
   const placeOrder = useMutation(api.orders.place);
 
@@ -29,10 +31,10 @@ export default function CheckoutPage() {
     e.preventDefault();
     try {
       const orderId = await placeOrder({ shippingAddress: formData });
-      toast.success("Order placed successfully!");
+      toast.success(t("orderPlacedSuccess"));
       navigate(`/orders`);
     } catch (error: any) {
-      toast.error(error.message || "Failed to place order");
+      toast.error(error.message || t("failedToPlaceOrder"));
     }
   };
 
@@ -51,16 +53,16 @@ export default function CheckoutPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">Checkout</h1>
+      <h1 className="text-4xl font-bold mb-8">{t("checkout")}</h1>
 
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Shipping Form */}
         <div className="lg:col-span-2">
           <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-6 space-y-6">
-            <h2 className="text-2xl font-bold">Shipping Address</h2>
+            <h2 className="text-2xl font-bold">{t("shippingAddress")}</h2>
             
             <div>
-              <label className="block text-sm font-semibold mb-2">Full Name</label>
+              <label className="block text-sm font-semibold mb-2">{t("fullName")}</label>
               <input
                 type="text"
                 required
@@ -71,7 +73,7 @@ export default function CheckoutPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold mb-2">Address Line 1</label>
+              <label className="block text-sm font-semibold mb-2">{t("addressLine1")}</label>
               <input
                 type="text"
                 required
@@ -82,7 +84,7 @@ export default function CheckoutPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold mb-2">Address Line 2 (Optional)</label>
+              <label className="block text-sm font-semibold mb-2">{t("addressLine2")}</label>
               <input
                 type="text"
                 value={formData.line2}
@@ -93,7 +95,7 @@ export default function CheckoutPage() {
 
             <div className="grid md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-semibold mb-2">City</label>
+                <label className="block text-sm font-semibold mb-2">{t("city")}</label>
                 <input
                   type="text"
                   required
@@ -103,7 +105,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-2">State</label>
+                <label className="block text-sm font-semibold mb-2">{t("state")}</label>
                 <input
                   type="text"
                   required
@@ -113,7 +115,7 @@ export default function CheckoutPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold mb-2">ZIP Code</label>
+                <label className="block text-sm font-semibold mb-2">{t("zipCode")}</label>
                 <input
                   type="text"
                   required
@@ -127,8 +129,8 @@ export default function CheckoutPage() {
             <button
               type="submit"
               className="w-full px-6 py-4 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-semibold text-lg"
-            >
-              Place Order
+              >
+              {t("placeOrder")}
             </button>
           </form>
         </div>
@@ -136,7 +138,7 @@ export default function CheckoutPage() {
         {/* Order Summary */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-xl shadow p-6 sticky top-24">
-            <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
+            <h2 className="text-2xl font-bold mb-6">{t("orderSummary")}</h2>
             <div className="space-y-4 mb-6">
               {cartItems.map((item) => (
                 <div key={item._id} className="flex gap-3">
@@ -149,7 +151,7 @@ export default function CheckoutPage() {
                     <p className="font-semibold text-sm line-clamp-2">
                       {item.product?.name}
                     </p>
-                    <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                    <p className="text-sm text-gray-600">{t("qty")}: {item.quantity}</p>
                   </div>
                   <span className="font-semibold">
                     ${((item.product?.price || 0) * item.quantity).toFixed(2)}
@@ -159,17 +161,17 @@ export default function CheckoutPage() {
             </div>
             <div className="space-y-3 border-t pt-4">
               <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal</span>
+                <span className="text-gray-600">{t("subtotal")}</span>
                 <span className="font-semibold">${subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Shipping</span>
+                <span className="text-gray-600">{t("shipping")}</span>
                 <span className="font-semibold">
-                  {shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}
+                  {shipping === 0 ? t("free") : `$${shipping.toFixed(2)}`}
                 </span>
               </div>
               <div className="border-t pt-3 flex justify-between text-xl font-bold">
-                <span>Total</span>
+                <span>{t("total")}</span>
                 <span className="text-primary">${total.toFixed(2)}</span>
               </div>
             </div>

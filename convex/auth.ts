@@ -2,6 +2,7 @@ import { convexAuth, getAuthUserId } from "@convex-dev/auth/server";
 import { Password } from "@convex-dev/auth/providers/Password";
 import { Anonymous } from "@convex-dev/auth/providers/Anonymous";
 import { query } from "./_generated/server";
+import { ADMINS } from "./admin";
 
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
   providers: [Password, Anonymous],
@@ -31,6 +32,9 @@ export const isAdmin = query({
     if (!user) {
       return false;
     }
-    return user.email === "zakzoka03@gmail.com";
+    if (!user.email) {
+      return false;
+    }
+    return ADMINS.includes(user.email);
   },
 });

@@ -2,11 +2,13 @@ import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
+export const ADMINS = ["zakzoka03@gmail.com"];
+
 async function requireAdmin(ctx: any) {
   const userId = await getAuthUserId(ctx);
   if (!userId) throw new Error("Not authenticated");
   const user = await ctx.db.get(userId);
-  if (!user || user.email !== "zakzoka03@gmail.com") {
+  if (!user || !ADMINS.includes(user.email)) {
     throw new Error("Admin access required");
   }
   return userId;
@@ -28,7 +30,7 @@ export const updateOrderStatus = mutation({
       v.literal("processing"),
       v.literal("shipped"),
       v.literal("delivered"),
-      v.literal("cancelled")
+      v.literal("cancelled"),
     ),
   },
   handler: async (ctx, args) => {
@@ -95,14 +97,14 @@ export const getStats = query({
   args: {},
   handler: async (ctx) => {
     await requireAdmin(ctx);
-    
+
     const products = await ctx.db.query("products").collect();
     const orders = await ctx.db.query("orders").collect();
     const categories = await ctx.db.query("categories").collect();
-    
+
     const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
     const activeProducts = products.filter((p) => p.isActive).length;
-    
+
     return {
       totalProducts: products.length,
       activeProducts,
