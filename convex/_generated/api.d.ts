@@ -12,6 +12,7 @@ import type * as admin from "../admin.js";
 import type * as auth from "../auth.js";
 import type * as cart from "../cart.js";
 import type * as categories from "../categories.js";
+import type * as crons from "../crons.js";
 import type * as http from "../http.js";
 import type * as interactions from "../interactions.js";
 import type * as orders from "../orders.js";
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   cart: typeof cart;
   categories: typeof categories;
+  crons: typeof crons;
   http: typeof http;
   interactions: typeof interactions;
   orders: typeof orders;
