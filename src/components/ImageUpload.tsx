@@ -4,6 +4,8 @@ import { api } from "../../convex/_generated/api";
 import { Upload, X } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
+const convexSiteUrl = import.meta.env.VITE_CONVEX_SITE_URL;
+
 interface ImageUploadProps {
   value: string;
   onChange: (url: string) => void;
@@ -21,22 +23,25 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
 
     try {
       setUploading(true);
-      
+
       // Get upload URL
       const uploadUrl = await generateUploadUrl();
-      
+
       // Upload file
       const result = await fetch(uploadUrl, {
         method: "POST",
         headers: { "Content-Type": file.type },
         body: file,
       });
-      
+
       const { storageId } = await result.json();
-      
+
       // Get the URL for the uploaded file
-      const imageUrl = `${window.location.origin}/api/storage/${storageId}`;
-      onChange(imageUrl);
+
+      const getImageUrl = new URL(`${convexSiteUrl}/getImage`);
+      getImageUrl.searchParams.set("storageId", storageId);
+
+      onChange(getImageUrl + "");
     } catch (error) {
       console.error("Upload failed:", error);
       alert("Failed to upload image");
@@ -75,7 +80,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
           </button>
         )}
       </div>
-      
+
       <div className="flex items-center gap-3">
         <input
           ref={fileInputRef}
