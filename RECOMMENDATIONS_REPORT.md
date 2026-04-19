@@ -89,3 +89,36 @@ This document explains how the current product recommendation pipeline (implemen
 ---
 
 If you'd like, I can implement the quick fixes now (filter cached items by `isActive`, add a cron or background job to regenerate, and avoid collecting the entire products table). Tell me which improvements to prioritize.
+
+## How we track user interactions
+
+- Mechanism: The front-end calls the `track` mutation in `convex/interactions.ts` whenever a user signals interest (views, searches, adds to cart, purchases). The mutation uses `getAuthUserId(ctx)` so only signed-in users are recorded. See [convex/interactions.ts](convex/interactions.ts).
+- Stored fields: each `interactions` row contains `userId`, `productId`, `type` (one of `view`, `search`, `cart_add`, `purchase`), a numeric `weight`, `categoryId`, and `tags` copied from the product at the time of the interaction.
+- Weighting: weights are defined in the repository (in `convex/interactions.ts`) as: `view: 1`, `search: 2`, `cart_add: 3`, `purchase: 5`. These weights feed the per-category and per-tag scoring in the generator.
+- Where calls happen: the front-end triggers `track` in key places (examples): the product list and product detail pages call the mutation on product clicks and views, and the add-to-cart flow triggers a `cart_add`. See [src/pages/ProductsPage.tsx](src/pages/ProductsPage.tsx), [src/pages/ProductDetailPage.tsx](src/pages/ProductDetailPage.tsx), and [src/pages/HomePage.tsx](src/pages/HomePage.tsx) for concrete usages.
+
+## Cron job and scheduled generation
+
+- There is a scheduled cron job that regenerates recommendations for all users on an hourly cadence. The job is defined in [convex/crons.ts](convex/crons.ts) and calls the `generateForAllUsers` mutation at the top of every hour (UTC minute 0).
+- What the cron does: `generateForAllUsers` enumerates users and runs `generateForUser` for each one. `generateForUser` reads that user's `interactions`, scores products, and writes a `recommendations` record (ordered `productIds` + `updatedAt`). This moves the heavy work into background so reads remain fast.
+- Manual triggering: in addition to the hourly cron, we recommend triggering `generateForUser` after high-signal events (purchase, add-to-cart) for active users to reduce personalization lag.
+
+## Algorithm details — how recommendations are computed
+
+- Source signals: the generator consumes the `interactions` table (weights, categoryId, tags) and the active products index (only products with `isActive === true`).
+- Scoring formula: for each user we compute per-category and per-tag scores by summing `interaction.weight` across the user's interactions. Each candidate product is scored as the sum of its category score plus the sum of scores for each of its tags.
+- Filtering: products that the user has already interacted with (tracked via `viewedProducts`) are excluded from the candidate list so we avoid recommending immediately-visited items.
+- Candidate selection: the current implementation collects all active products, scores them, sorts by score, and picks the top N (20) to cache. This is simple but not optimal for very large catalogs — see scalability notes above.
+- Caching & serving: the ordered top-N product IDs are stored in `recommendations` (per-user). `getForUser` returns the cached products (up to the requested `limit`, default 8) if the cache is fresh (1 hour). Otherwise it falls back to returning trending active products.
+
+## What to expect from this recommender (practical notes)
+
+- Relevance: users who generate category- and tag-rich interactions (multiple views, searches, cart adds, purchases) will see rapidly improving personalization. Purchase and cart actions carry more weight, so they shape results strongly.
+- Cold start & fallback: new users see trending/active products until they accumulate enough interactions; this is expected behavior.
+- Staleness window: personalization updates are subject to the cache TTL (1 hour) and the cron cadence. If you need near-real-time personalization, trigger `generateForUser` on high-signal events or reduce the TTL (trade-off: increased generation load).
+- Edge cases: because caching stores product IDs, products deactivated after generation may still be returned until the cache refreshes. A simple fix is to filter cached product docs by `isActive` at read time in `getForUser` (recommended quick fix).
+- Scalability: the current approach collects all active products during generation — this will not scale well for large catalogs. Consider limiting candidates to products in the user's top categories, sampling, or using an embedding / ANN-based candidate generator for production-scale catalogs.
+
+---
+
+If you'd like, I can implement the recommended quick fixes now: filter cached results by `isActive` at read time, ensure `generateForUser` caches only active IDs, and wire up an event-trigger to regenerate for a user after purchases or cart adds. Tell me which to prioritize.
