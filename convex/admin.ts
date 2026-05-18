@@ -2,7 +2,11 @@ import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
-export const ADMINS = ["zakzoka03@gmail.com", "belarbi.salim70@g.ens-kouba.dz"];
+export const ADMINS = [
+  "zakzoka03@gmail.com",
+  "belarbi.salim70@g.ens-kouba.dz",
+  "salim.kaddouri.45@gmail.com",
+];
 
 async function requireAdmin(ctx: any) {
   const userId = await getAuthUserId(ctx);
